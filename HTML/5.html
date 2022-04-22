@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="./request.js"></script>
+  <script>
+    // function hd() { }
+    // hd.site = "houdunren.com"
+    // console.dir(hd)
+    function query(name) {
+      const cache = query.cache || (query.cache = new Map());
+
+      if (cache.has(name)) {
+        console.log("走缓存了");
+        return Promise.resolve(cache.get(name))
+      }
+
+      return request('http://tc.mswla.top/comment/music?id=186016&limit=1').then(value => {
+        cache.set(name, value.hotComments)
+        console.log('====================================');
+        console.log(cache);
+        console.log(value);
+        console.log('====================================');
+        console.log('没走缓存')
+        return value.hotComments
+      })
+    }
+
+    query('moshen').then(res => {
+      console.log(res);
+    })
+
+    setTimeout(() => {
+      query('moshen').then(res => {
+        console.log(res);
+      });
+    }, 1000)
+
+  </script>
+</body>
+
+</html>

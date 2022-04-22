@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // let p1 = new Promise((reslove, reject) => {
+    //   reslove('fulfilled')
+    // })
+    // let p2 = p1.then(
+    //   value => consloe.log(value),
+    //   error => consloe.log(error)
+    // ).then(res => {
+    //   console.log(res);
+    // })
+    // setTimeout(() => {
+    //   console.log(p1);
+    //   console.log(p2);
+    // })
+
+    // console.log('1')
+    // setTimeout(() => {
+    //   console.log('2')
+    // })
+    // new Promise((resolve, rejects) => {
+    //   console.log('3')
+    //   resolve()
+    // }).then(() => {
+    //   console.log('4')
+    // })
+    // console.log(5)
+
+
+    class ParamError extends Error {
+      constructor(msg) {
+        super(msg)
+        this.name = "ParamError"
+      }
+    }
+
+
+    class HttpError extends Error {
+      constructor(msg) {
+        super(msg)
+        this.name = "HttpError"
+      }
+    }
+
+    function request(url) {
+      return new Promise((reslove, reject) => {
+        if (!/^http/.test(url)) {
+          throw new ParamError('请求地址格式错误')
+        }
+        let xhr = new XMLHttpRequest()
+        xhr.open("GET", url);
+        xhr.send();
+        xhr.onload = function () {
+          if (this.status == 200) {
+            reslove(JSON.parse(this.response))
+          } else if (this.status == 404) {
+            reject(new HttpError('不存在'))
+          }
+          else {
+            reject("加载失败")
+          }
+        }
+        xhr.onerror = function () {
+          reject(this)
+        }
+      })
+    }
+
+
+    let url = 'http://tc.mswla.top/comment/music?id=186016&limit=1'
+    request(url).then(value => {
+      console.log(value);
+    }, err => {
+      console.log(err.message);
+    })
+
+
+  </script>
+</body>
+
+</html>
