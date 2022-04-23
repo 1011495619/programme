@@ -14,6 +14,8 @@
 *
 * 五、constructor
 *   1、Person ===  Person.prototype.constructor true  通过constructor属性可以指向构造函数
+*   2、当获取person1.constructor时，person1中没有constructor属性，他会从person1的原型中去获取也就是Person.prototype中读取
+*     所以person1.constructor === Person.prototype.constructor
  */
 
 function Person() {
@@ -23,8 +25,10 @@ function Person() {
 var person = new Person();
 person.name = 'moshen';
 console.log(person.name); // moshen
+console.log(person)
 
 Person.prototype.name = 'Kevin';
+Object.prototype.moshen= '墨深物联网';
 var person1 = new Person();
 var person2 = new Person();
 console.log(person1.name);
@@ -33,4 +37,12 @@ console.log(person1.__proto__ === Person.prototype )
 console.log(Person ===  Person.prototype.constructor )
 console.log(person1.__proto__ ===  Person.prototype.constructor.prototype )
 console.log(Object.getPrototypeOf(person1)===Person.prototype)
-console.log(Person.prototype)
+console.log(Person.prototype.__proto__===Object.prototype)
+console.log(Object.getPrototypeOf(Person.prototype))
+console.log(Person.prototype.__proto__.constructor===person1.__proto__.__proto__.constructor)
+console.log(person1.__proto__.__proto__.constructor)
+console.log(Person)
+console.log(person1.moshen)
+console.log('---------------------------------------------------')
+console.log(Object.prototype.__proto__===null)
+console.log(person1.constructor===Person)
